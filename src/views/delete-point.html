@@ -1,13 +1,14 @@
 {% extends "layout.html" %}
 
-{% set pageId = "page-search-results" %}
+{% set pageId = "page-delete" %}
 
 {% block title %}
-    <title>Resultado da pesquisa</title>
+    <title>Lista pontos de coletas</title>
 {% endblock title %}
 
 {% block styles %}
-    <link rel="stylesheet" href="/styles/search-results.css">
+    <link rel="stylesheet" href="/styles/delete-point.css">
+    <link rel="stylesheet" href="/styles/modal.css">
 {% endblock styles %}
 
 {% block content %}
@@ -16,19 +17,19 @@
     {% if total > 0 %}
     
         <h4>
-            <strong>{{total}} pontos</strong>
-            encontrados <a href="\delete"><button>Excluir pontos</a></button>
+            <strong>{{total}} registro</strong>
+            encontrados
         </h4>
 
         <div class="cards">
 
             {% for place in places %}
                 <div class="card">
-                    <img src="{{place.image}}" alt="{{place.name}}">
-                    <h1>{{place.name}}</h1>
+                    <img src="{{place.image}}" alt="{{place.name}}">                
+                    <h1>{{place.name}} <a href="/delete/{{place.id}}"><button><img src="/assets/trash.svg" alt="Logomarca"></button></a></h1>
                     <h3>{{place.items}}</h3>
                     <p>
-                        {{place.city}}, {{place.state}}
+                        {{place.city}}, {{place.state}} 
                         <br/>
                         {{place.address}}
                         <br/>
@@ -41,8 +42,14 @@
         {%else%}
         <h4>
             <strong>Nenhum</strong>
-            local encontrado.
+            registro cadastrado.
         </h4>
     {% endif %}
     </main>
 {% endblock content %}
+
+{% block modal %}
+    {% if excluido %}
+        {%include "partials/point-delete.html"%}}
+    {% endif %} 
+{% endblock modal %}

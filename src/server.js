@@ -78,6 +78,37 @@ server.get("/search-results", (req, res) => {
     
 })
 
+server.get("/delete", (req, res) => {
+
+    const search = req.query.search
+
+    if(search == ""){
+        // pesquisa vazia
+        return res.render("search-results.html", {total: 0})
+    }
+
+    // pegar os dados do banco de dados
+    db.all(`SELECT * FROM places`, function(err, rows){
+        if(err){
+            console.log(err)
+        }
+        const total = rows.length;
+        //mostrar a pagina htm com os dados do banco de dados
+        return res.render("delete-point.html", {places: rows, total: total})
+    })
+    
+})
+
+server.get("/delete/:id", (req, res) => {
+    // deletar os dados da tabela 
+    const deleteId = req.params.id;      
+    db.run(`DELETE FROM places WHERE id = ?`, [deleteId], function(err){
+        if(err){
+        return console.log(err)
+    }
+         return res.render("delete-point.html",{excluido : true} )
+    })
+})
 
 // ligar o servidor
 server.listen(3000)
